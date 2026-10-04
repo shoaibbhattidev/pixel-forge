@@ -23,9 +23,7 @@ function App() {
       setNotification(null);
     }, 3000);
 
-    return () => {
-      clearTimeout(timer);
-    };
+    return () => clearTimeout(timer);
   }, [notification]);
 
   function handleFilesSelected(files) {
@@ -52,12 +50,10 @@ function App() {
         return;
       }
 
-      const previewUrl = URL.createObjectURL(file);
-
       validImages.push({
         id: createImageId(),
         file,
-        previewUrl,
+        previewUrl: URL.createObjectURL(file),
         optimizedUrl: null,
         optimizedSize: null,
         optimizationStatus: "ready",
@@ -86,11 +82,8 @@ function App() {
   function handleOptimizeImage(id, blob, outputFormat, status) {
     setImages((previousImages) =>
       previousImages.map((image) => {
-        if (image.id !== id) {
-          return image;
-        }
+        if (image.id !== id) return image;
 
-        // Processing state
         if (status === "processing") {
           return {
             ...image,
@@ -98,7 +91,6 @@ function App() {
           };
         }
 
-        // Failed state
         if (status === "failed") {
           return {
             ...image,
@@ -106,7 +98,6 @@ function App() {
           };
         }
 
-        // Optimized state
         const optimizedUrl = URL.createObjectURL(blob);
 
         if (image.optimizedUrl) {
@@ -131,7 +122,7 @@ function App() {
     setBatchProgress(0);
 
     try {
-      for (let index = 0; index < images.length; index++) {
+      for (let index = 0; index < images.length; index += 1) {
         const image = images[index];
         const settings = imageSettings[image.id] || {};
 
@@ -216,3 +207,217 @@ function App() {
     }
   }
 
+  function handleRemoveImage(id) {
+    setImages((previousImages) => {
+      const imageToRemove = previousImages.find((image) => image.id === id);
+
+      if (imageToRemove) {
+        URL.revokeObjectURL(imageToRemove.previewUrl);
+
+        if (imageToRemove.optimizedUrl) {
+          URL.revokeObjectURL(imageToRemove.optimizedUrl);
+        }
+      }
+
+      return previousImages.filter((image) => image.id !== id);
+    });
+
+    setImageSettings((previous) => {
+      const next = { ...previous };
+      delete next[id];
+      return next;
+    });
+  }
+
+  async function handleDownloadAll() {
+    const optimizedImages = images.filter(
+      (image) => image.optimizedUrl && image.optimizedSize,
+    );
+
+    if (optimizedImages.length === 0) {
+      setNotification({
+        type: "warning",
+        message: "Optimize at least one image first.",
+      });
+      return;
+    }
+
+    try {
+      const zip = new JSZip();
+
+      for (const image of optimizedImages) {
+        const response = await fetch(image.optimizedUrl);
+        const blob = await response.blob();
+
+        const extension =
+          image.outputFormat === "image/jpeg"
+            ? "jpg"
+            : image.outputFormat === "image/png"
+              ? "png"
+              : image.outputFormat === "image/avif"
+                ? "avif"
+                : "webp";
+
+        const fileName = `${image.file.name.replace(/\.[^/.]+$/, "")}-optimized.${extension}`;
+
+        zip.file(fileName, blob);
+      }
+
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(zipBlob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = "optimized-images.zip";
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("ZIP creation failed:", error);
+
+      setNotification({
+        type: "danger",
+        message: "Failed to create ZIP file.",
+      });
+    }
+  }
+
+  function handleClearAll() {
+    setImages((previousImages) => {
+      previousImages.forEach((image) => {
+        URL.revokeObjectURL(image.previewUrl);
+
+        if (image.optimizedUrl) {
+          URL.revokeObjectURL(image.optimizedUrl);
+        }
+      });
+
+      return [];
+    });
+
+    setImageSettings({});
+    setBatchProgress(0);
+  }
+
+  return (
+    <>
+      <Header />
+
+      <main className="container py-5">
+        <div className="mb-5 text-center">
+          <h2 className="display-5 fw-bold">Optimize your images</h2>
+
+          <p className="lead text-secondary">
+            Resize, compress and convert images directly in your browser.
+          </p>
+        </div>
+
+        <DropZone onFilesSelected={handleFilesSelected} />
+
+        {notification && (
+          <Toast
+            type={notification.type}
+            message={notification.message}
+            onClose={() => setNotification(null)}
+          />
+        )}
+
+        {images.length > 0 && (
+          <>
+            <div className="d-flex justify-content-between align-items-center mt-5 mb-3">
+              <h2 className="h5 mb-0">
+                Your Images
+                <span className="badge text-bg-secondary ms-2">
+                  {images.length}
+                </span>
+              </h2>
+
+              <div className="d-flex gap-2">
+                <button
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                  onClick={handleOptimizeAll}
+                  disabled={isOptimizingAll}
+                >
+                  {isOptimizingAll ? (
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        aria-hidden="true"
+                      ></span>
+                      Optimizing...
+                    </>
+                  ) : (
+                    <>
+                      <i className="bi bi-magic me-2"></i>
+                      Optimize All
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={handleClearAll}
+                  disabled={isOptimizingAll}
+                >
+                  <i className="bi bi-trash me-2"></i>
+                  Clear All
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-success btn-sm"
+                  onClick={handleDownloadAll}
+                  disabled={
+                    isOptimizingAll ||
+                    !images.some((image) => image.optimizedUrl)
+                  }
+                >
+                  <i className="bi bi-file-earmark-zip me-2"></i>
+                  Download All
+                </button>
+              </div>
+            </div>
+
+            {isOptimizingAll && (
+              <div className="mb-4">
+                <div className="d-flex justify-content-between small mb-1">
+                  <span>Optimizing images...</span>
+                  <span>{batchProgress}%</span>
+                </div>
+
+                <div
+                  className="progress"
+                  role="progressbar"
+                  aria-valuenow={batchProgress}
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  <div
+                    className="progress-bar"
+                    style={{ width: `${batchProgress}%` }}
+                  >
+                    {batchProgress}%
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        <ImageGrid
+          images={images}
+          onRemove={handleRemoveImage}
+          onOptimize={handleOptimizeImage}
+          onSettingsChange={handleSettingsChange}
+        />
+      </main>
+    </>
+  );
+}
+
+export default App;
