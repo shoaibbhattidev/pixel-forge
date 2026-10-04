@@ -34,7 +34,7 @@ function MetadataPanel({ imageId, mode, setMode, metadata, setMetadata, outputFo
         <input
           type="radio"
           className="btn-check"
-          name="metadataMode"
+          name={`metadataMode-${imageId}`}
           id={`metadata-remove-${imageId}`}
           value="remove"
           checked={mode === "remove"}
@@ -51,7 +51,7 @@ function MetadataPanel({ imageId, mode, setMode, metadata, setMetadata, outputFo
         <input
           type="radio"
           className="btn-check"
-          name="metadataMode"
+          name={`metadataMode-${imageId}`}
           id={`metadata-custom-${imageId}`}
           value="custom"
           checked={mode === "custom"}
@@ -68,8 +68,9 @@ function MetadataPanel({ imageId, mode, setMode, metadata, setMetadata, outputFo
 
       {mode === "preserve" && (
         <div className="alert alert-secondary small mb-0">
-          Original metadata will be preserved when supported by the output
-          format.
+          {outputFormat === "image/jpeg"
+            ? "JPEG metadata preservation is supported. Other output formats are re-encoded without the original metadata."
+            : "This output format is re-encoded by the browser, so original metadata will not be preserved."}
         </div>
       )}
 
@@ -81,7 +82,11 @@ function MetadataPanel({ imageId, mode, setMode, metadata, setMetadata, outputFo
 
       {mode === "custom" && (
         <div>
-          <div className="alert alert-info small">\n            Custom EXIF writing is supported for JPEG output. Empty fields are ignored.\n          </div>\n\n          {/* Basic Information */
+          <div className="alert alert-info small">
+            Custom EXIF writing is supported for JPEG output. Empty fields are ignored.
+          </div>
+
+          {/* Basic Information */
           <h5 className="small fw-bold mt-3">Basic Information</h5>
 
           <div className="row g-2">
