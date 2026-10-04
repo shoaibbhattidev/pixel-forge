@@ -156,6 +156,11 @@ export async function applyMetadata(
     if (mode === "preserve" && sourceFile.type === "image/jpeg") {
       const sourceDataUrl = await fileToDataUrl(sourceFile);
       exifObject = piexif.load(sourceDataUrl);
+
+      // Canvas has already normalized the displayed orientation.
+      if (exifObject["0th"]) {
+        exifObject["0th"][piexif.ImageIFD.Orientation] = 1;
+      }
     } else if (mode === "custom") {
       exifObject = buildCustomExif(customMetadata);
     }
