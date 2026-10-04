@@ -17,7 +17,7 @@ function MetadataPanel({ imageId, mode, setMode, metadata, setMetadata }) {
         <input
           type="radio"
           className="btn-check"
-          name="metadataMode"
+          name={`metadataMode-${imageId}`}
           id={`metadata-preserve-${imageId}`}
           value="preserve"
           checked={mode === "preserve"}
