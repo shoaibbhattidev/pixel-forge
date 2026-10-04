@@ -10,7 +10,7 @@ function toExifDate(date, time) {
   const cleanDate = String(date).replace(/-/g, ":");
   const rawTime = isNonEmpty(time) ? String(time).trim() : "";
   const cleanTime = rawTime
-    ? (/^\\d{2}:\\d{2}:\\d{2}$/.test(rawTime) ? rawTime : `${rawTime}:00`)
+    ? (/^\d{2}:\d{2}:\d{2}$/.test(rawTime) ? rawTime : `${rawTime}:00`)
     : "00:00:00";
   return `${cleanDate} ${cleanTime}`;
 }
@@ -88,7 +88,7 @@ function buildCustomExif(metadata) {
   }
 
   if (isNonEmpty(metadata.exposureTime)) {
-    const match = String(metadata.exposureTime).trim().match(/^(\\d+)\\s*\\/\\s*(\\d+)$/);
+    const match = String(metadata.exposureTime).trim().match(/^(\d+)\s*\/\s*(\d+)$/);
     const value = match
       ? [Number(match[1]), Number(match[2])]
       : toRational(metadata.exposureTime);
@@ -96,7 +96,7 @@ function buildCustomExif(metadata) {
   }
 
   if (isNonEmpty(metadata.fNumber)) {
-    const value = String(metadata.fNumber).replace(/^f\\//i, "");
+    const value = String(metadata.fNumber).replace(/^f\//i, "");
     const rational = toRational(value);
     if (rational) exif[piexif.ExifIFD.FNumber] = rational;
   }
