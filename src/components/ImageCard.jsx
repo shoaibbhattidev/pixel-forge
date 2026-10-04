@@ -515,6 +515,7 @@ function ImageCard({ image, onRemove, onOptimize, onSettingsChange }) {
             setMode={setMetadataMode}
             metadata={metadata}
             setMetadata={setMetadata}
+            outputFormat={outputFormat}
           />
 
           <div className="border-top mt-4 pt-4">
