@@ -1,4 +1,4 @@
-function MetadataPanel({ imageId, mode, setMode, metadata, setMetadata }) {
+function MetadataPanel({ imageId, mode, setMode, metadata, setMetadata, outputFormat }) {
   function handleChange(event) {
     const { name, value } = event.target;
 
@@ -75,13 +75,13 @@ function MetadataPanel({ imageId, mode, setMode, metadata, setMetadata }) {
 
       {mode === "remove" && (
         <div className="alert alert-warning small mb-0">
-          Metadata will be removed from the optimized image when supported.
+          Metadata is removed by the clean canvas export. This mode does not add metadata back.
         </div>
       )}
 
       {mode === "custom" && (
         <div>
-          {/* Basic Information */}
+          <div className="alert alert-info small">\n            Custom EXIF writing is supported for JPEG output. Empty fields are ignored.\n          </div>\n\n          {/* Basic Information */
           <h5 className="small fw-bold mt-3">Basic Information</h5>
 
           <div className="row g-2">
