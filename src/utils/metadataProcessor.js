@@ -8,8 +8,8 @@ function isNonEmpty(value) {
 function toExifDate(date, time) {
   if (!isNonEmpty(date)) return null;
   const cleanDate = String(date).replace(/-/g, ":");
-  const cleanTime = isNonEmpty(time) ? String(time) : "00:00:00";
-  return `${cleanDate} ${cleanTime}:00`.replace(/:00$/, "");
+  const cleanTime = isNonEmpty(time) ? `${String(time)}:00` : "00:00:00";
+  return `${cleanDate} ${cleanTime}`;
 }
 
 function toRational(value) {
