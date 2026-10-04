@@ -8,7 +8,10 @@ function isNonEmpty(value) {
 function toExifDate(date, time) {
   if (!isNonEmpty(date)) return null;
   const cleanDate = String(date).replace(/-/g, ":");
-  const cleanTime = isNonEmpty(time) ? `${String(time)}:00` : "00:00:00";
+  const rawTime = isNonEmpty(time) ? String(time).trim() : "";
+  const cleanTime = rawTime
+    ? (/^\\d{2}:\\d{2}:\\d{2}$/.test(rawTime) ? rawTime : `${rawTime}:00`)
+    : "00:00:00";
   return `${cleanDate} ${cleanTime}`;
 }
 
