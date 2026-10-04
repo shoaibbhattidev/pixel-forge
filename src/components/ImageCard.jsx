@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { optimizeImage, optimizeToTargetSize } from "../utils/imageProcessor";
 import imagePresets from "../utils/imagePresets";
 import MetadataPanel from "./MetadataPanel";
-import { readMetadata } from "../utils/metadataProcessor";
+import { applyMetadata, readMetadata } from "../utils/metadataProcessor";
+import MetadataViewer from "./MetadataViewer";
 import { useImageSettings } from "../hooks/useImageSettings";
 
-function ImageCard({ image, onRemove, onOptimize }) {
+function ImageCard({ image, onRemove, onOptimize, onSettingsChange }) {
   const {
     resizeWidth,
     setResizeWidth,
@@ -50,6 +51,32 @@ function ImageCard({ image, onRemove, onOptimize }) {
   const [showMetadata, setShowMetadata] = useState(false);
   const [metadataLoading, setMetadataLoading] = useState(false);
   const [dimensions, setDimensions] = useState(null);
+
+  useEffect(() => {
+    onSettingsChange?.(id, {
+      resizeWidth: Number(resizeWidth) || null,
+      resizeHeight: Number(resizeHeight) || null,
+      outputFormat,
+      quality,
+      targetSize: targetSize ? Number(targetSize) : null,
+      targetUnit,
+      resizeMode,
+      metadataMode,
+      metadata,
+    });
+  }, [
+    id,
+    resizeWidth,
+    resizeHeight,
+    outputFormat,
+    quality,
+    targetSize,
+    targetUnit,
+    resizeMode,
+    metadataMode,
+    metadata,
+    onSettingsChange,
+  ]);
   useEffect(() => {
     const imageElement = new Image();
 
@@ -173,6 +200,14 @@ function ImageCard({ image, onRemove, onOptimize }) {
           resizeMode,
         );
       }
+
+      blob = await applyMetadata(
+        blob,
+        file,
+        outputFormat,
+        metadataMode,
+        metadata,
+      );
 
       onOptimize(id, blob, outputFormat, "optimized");
     } catch (error) {
@@ -503,18 +538,7 @@ function ImageCard({ image, onRemove, onOptimize }) {
             <div className="mt-3">
               <h5 className="small fw-bold">Image Metadata</h5>
 
-              {imageMetadata && Object.keys(imageMetadata).length > 0 ? (
-                <pre
-                  className="small bg-light p-3 rounded overflow-auto"
-                  style={{ maxHeight: "300px" }}
-                >
-                  {JSON.stringify(imageMetadata, null, 2)}
-                </pre>
-              ) : (
-                <div className="alert alert-secondary small mb-0">
-                  No readable metadata found.
-                </div>
-              )}
+              <MetadataViewer metadata={imageMetadata} />
             </div>
           )}
 
