@@ -151,14 +151,16 @@ export async function optimizeToTargetSize(
   minQuality = 0.1,
   maxQuality = 1,
   mode = "stretch",
+  postProcess = async (blob) => blob,
 ) {
   const canvas = await resizeImage(file, width, height, mode);
 
-  // First test maximum quality.
-  const maxBlob = await canvasToBlob(canvas, type, maxQuality);
+  // Test the final exported blob, including optional metadata.
+  const maxBlob = await postProcess(
+    await canvasToBlob(canvas, type, maxQuality),
+  );
 
-  // If even maximum quality is below the target,
-  // this is the largest file this encoder can produce.
+  // If maximum quality is already below the target, keep it.
   if (maxBlob.size <= targetBytes) {
     return maxBlob;
   }
@@ -171,7 +173,7 @@ export async function optimizeToTargetSize(
   for (let i = 0; i < 14; i++) {
     const quality = (low + high) / 2;
 
-    const blob = await canvasToBlob(canvas, type, quality);
+    const blob = await postProcess(await canvasToBlob(canvas, type, quality));
 
     if (blob.size <= targetBytes) {
       bestBlob = blob;
@@ -189,5 +191,5 @@ export async function optimizeToTargetSize(
   }
 
   // Nothing could fit under target.
-  return canvasToBlob(canvas, type, minQuality);
+  return postProcess(await canvasToBlob(canvas, type, minQuality));
 }
