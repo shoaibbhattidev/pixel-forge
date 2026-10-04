@@ -166,6 +166,14 @@ function App() {
             0.1,
             1,
             resizeMode,
+            (candidate) =>
+              applyMetadata(
+                candidate,
+                image.file,
+                outputFormat,
+                settings.metadataMode || "preserve",
+                settings.metadata || {},
+              ),
           );
         } else {
           blob = await optimizeImage(
@@ -178,13 +186,15 @@ function App() {
           );
         }
 
-        blob = await applyMetadata(
-          blob,
-          image.file,
-          outputFormat,
-          settings.metadataMode || "preserve",
-          settings.metadata || {},
-        );
+        if (!settings.targetSize) {
+          blob = await applyMetadata(
+            blob,
+            image.file,
+            outputFormat,
+            settings.metadataMode || "preserve",
+            settings.metadata || {},
+          );
+        }
 
         handleOptimizeImage(
           image.id,
