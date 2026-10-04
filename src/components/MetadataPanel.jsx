@@ -86,7 +86,7 @@ function MetadataPanel({ imageId, mode, setMode, metadata, setMetadata, outputFo
             Custom EXIF writing is supported for JPEG output. Empty fields are ignored.
           </div>
 
-          {/* Basic Information */
+          {/* Basic Information */}
           <h5 className="small fw-bold mt-3">Basic Information</h5>
 
           <div className="row g-2">
