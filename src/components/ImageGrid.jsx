@@ -14,6 +14,7 @@ function ImageGrid({ images, onRemove, onOptimize, onSettingsChange }) {
               image={image}
               onRemove={onRemove}
               onOptimize={onOptimize}
+              onSettingsChange={onSettingsChange}
             />
           </div>
         ))}
