@@ -189,6 +189,14 @@ function ImageCard({ image, onRemove, onOptimize, onSettingsChange }) {
           0.1,
           1,
           resizeMode,
+          (candidate) =>
+            applyMetadata(
+              candidate,
+              file,
+              outputFormat,
+              metadataMode,
+              metadata,
+            ),
         );
       } else {
         blob = await optimizeImage(
@@ -201,13 +209,15 @@ function ImageCard({ image, onRemove, onOptimize, onSettingsChange }) {
         );
       }
 
-      blob = await applyMetadata(
-        blob,
-        file,
-        outputFormat,
-        metadataMode,
-        metadata,
-      );
+      if (!targetSize) {
+        blob = await applyMetadata(
+          blob,
+          file,
+          outputFormat,
+          metadataMode,
+          metadata,
+        );
+      }
 
       onOptimize(id, blob, outputFormat, "optimized");
     } catch (error) {
