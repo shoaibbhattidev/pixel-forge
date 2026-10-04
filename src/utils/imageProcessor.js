@@ -38,9 +38,6 @@ export async function resizeImage(file, width, height, mode = "stretch") {
     return canvas;
   }
 
-  const imageRatio = image.width / image.height;
-  const targetRatio = width / height;
-
   // Fit
   if (mode === "fit") {
     const scale = Math.min(width / image.width, height / image.height);
@@ -71,14 +68,6 @@ export async function resizeImage(file, width, height, mode = "stretch") {
 }
 
 export async function optimizePng(canvas) {
-  const context = canvas.getContext("2d");
-
-  if (!context) {
-    throw new Error("Failed to get canvas context");
-  }
-
-  const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
   const pngBlob = await new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (!blob) {
