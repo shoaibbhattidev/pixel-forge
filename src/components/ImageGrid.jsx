@@ -1,6 +1,6 @@
 import ImageCard from "./ImageCard";
 
-function ImageGrid({ images, onRemove, onOptimize }) {
+function ImageGrid({ images, onRemove, onOptimize, onSettingsChange }) {
   if (images.length === 0) {
     return null;
   }
