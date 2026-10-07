@@ -40,19 +40,19 @@ function Header() {
             <span className="small text-secondary d-none d-md-inline">
               Your images stay in your browser
             </span>
-            <label className="theme-switch" title={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
-              <i className="bi bi-sun-fill theme-icon" aria-hidden="true"></i>
-              <input
-                id="theme-toggle"
-                type="checkbox"
-                role="switch"
-                checked={darkMode}
-                onChange={(event) => setDarkMode(event.target.checked)}
-                aria-label="Toggle dark mode"
-              />
-              <span className="theme-slider" aria-hidden="true"></span>
-              <i className="bi bi-moon-stars-fill theme-icon" aria-hidden="true"></i>
-            </label>
+            <button
+              type="button"
+              className={`theme-toggle-button ${darkMode ? "is-dark" : ""}`}
+              onClick={() => setDarkMode((value) => !value)}
+              aria-pressed={darkMode}
+              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+              title={darkMode ? "Light mode" : "Dark mode"}
+            >
+              <span className="theme-toggle-icon" aria-hidden="true">
+                <i className={`bi ${darkMode ? "bi-moon-stars-fill" : "bi-sun-fill"}`}></i>
+              </span>
+              <span className="theme-toggle-knob" aria-hidden="true"></span>
+            </button>
           </div>
         </div>
       </nav>
