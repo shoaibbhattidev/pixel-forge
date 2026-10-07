@@ -16,14 +16,6 @@ function Header() {
     } catch {}
   }, [darkMode]);
 
-  useEffect(() => {
-    const button = document.getElementById("theme-toggle");
-    if (!button) return;
-    const handler = () => setDarkMode((value) => !value);
-    button.addEventListener("click", handler);
-    return () => button.removeEventListener("click", handler);
-  }, []);
-
 
   return (
     <header className="border-bottom bg-body sticky-top">
@@ -48,10 +40,19 @@ function Header() {
             <span className="small text-secondary d-none d-md-inline">
               Your images stay in your browser
             </span>
-            <button type="button" className="theme-toggle" id="theme-toggle" aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"} title={darkMode ? "Light mode" : "Dark mode"}>
-              <i className={`bi ${darkMode ? "bi-sun-fill" : "bi-moon-stars-fill"}`} aria-hidden="true"></i>
-              <span className="d-none d-sm-inline">{darkMode ? "Light" : "Dark"}</span>
-            </button>
+            <label className="theme-switch" title={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
+              <i className="bi bi-sun-fill theme-icon" aria-hidden="true"></i>
+              <input
+                id="theme-toggle"
+                type="checkbox"
+                role="switch"
+                checked={darkMode}
+                onChange={(event) => setDarkMode(event.target.checked)}
+                aria-label="Toggle dark mode"
+              />
+              <span className="theme-slider" aria-hidden="true"></span>
+              <i className="bi bi-moon-stars-fill theme-icon" aria-hidden="true"></i>
+            </label>
           </div>
         </div>
       </nav>
