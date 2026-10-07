@@ -41,7 +41,7 @@ function DropZone({ onFilesSelected }) {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       className={`
-        card
+        card drop-zone
         border-2
         border-dashed
         rounded-4
