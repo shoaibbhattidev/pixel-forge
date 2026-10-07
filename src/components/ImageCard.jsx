@@ -574,9 +574,19 @@ function ImageCard({ image, onRemove, onOptimize, onSettingsChange }) {
             type="button"
             className="btn btn-primary w-100 mt-3"
             onClick={handleResize}
+            disabled={optimizationStatus === "processing"}
           >
-            <i className="bi bi-magic me-2"></i>
-            Optimize Image
+            {optimizationStatus === "processing" ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                Processing...
+              </>
+            ) : (
+              <>
+                <i className="bi bi-magic me-2"></i>
+                Optimize Image
+              </>
+            )}
           </button>
         </div>
 
