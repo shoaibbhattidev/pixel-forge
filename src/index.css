@@ -88,3 +88,67 @@ html.dark .btn-outline-secondary:hover { color:#06110b; background:#35e889; bord
 .theme-toggle { display:inline-flex; align-items:center; gap:.4rem; border:1px solid rgba(25,135,84,.28); border-radius:999px; padding:.42rem .72rem; background:rgba(25,135,84,.08); color:inherit; font-size:.85rem; font-weight:600; cursor:pointer; transition:.2s ease; }
 .theme-toggle:hover { transform:translateY(-1px); background:rgba(25,135,84,.16); }
 html.dark .theme-toggle { color:#79ffb2; border-color:rgba(0,255,140,.3); background:rgba(0,255,140,.07); box-shadow:inset 0 0 18px rgba(0,255,140,.03),0 0 18px rgba(0,255,140,.04); }
+
+.theme-switch {
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
+  cursor:pointer;
+  padding:.3rem .45rem;
+  border:1px solid rgba(25,135,84,.25);
+  border-radius:999px;
+  background:rgba(255,255,255,.55);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  box-shadow:0 4px 18px rgba(0,0,0,.06);
+}
+.theme-switch input {
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+.theme-icon {
+  font-size:.75rem;
+  color:#198754;
+}
+.theme-slider {
+  position:relative;
+  width:42px;
+  height:23px;
+  border-radius:999px;
+  background:#d9e1e8;
+  border:1px solid rgba(25,135,84,.22);
+  transition:.2s ease;
+}
+.theme-slider::after {
+  content:"";
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:17px;
+  height:17px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 2px 7px rgba(0,0,0,.25);
+  transition:.2s ease;
+}
+.theme-switch input:checked + .theme-slider {
+  background:#08251a;
+  border-color:#35e889;
+  box-shadow:inset 0 0 12px rgba(0,255,140,.16),0 0 12px rgba(0,255,140,.12);
+}
+.theme-switch input:checked + .theme-slider::after {
+  transform:translateX(19px);
+  background:#35e889;
+  box-shadow:0 0 10px rgba(53,232,137,.7);
+}
+.theme-switch:focus-within {
+  outline:2px solid rgba(25,135,84,.35);
+  outline-offset:2px;
+}
+html.dark .theme-switch {
+  background:rgba(5,8,12,.72);
+  border-color:rgba(0,255,140,.22);
+  box-shadow:inset 0 0 14px rgba(0,255,140,.04),0 4px 20px rgba(0,0,0,.25);
+}
+html.dark .theme-icon { color:#79ffb2; }
