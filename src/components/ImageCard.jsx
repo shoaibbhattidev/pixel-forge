@@ -586,7 +586,7 @@ function ImageCard({ image, onRemove, onOptimize, onSettingsChange }) {
             <h4 className="h6 mb-3">Optimized Preview</h4>
 
             {/* Optimized Image */}
-            <div className="bg-light rounded p-3">
+            <div className="preview-frame rounded p-3">
               <img
                 src={optimizedUrl}
                 alt="Optimized preview"
