@@ -22,6 +22,10 @@ function Header() {
             <span className="small text-secondary d-none d-md-inline">
               Your images stay in your browser
             </span>
+            <button type="button" className="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode" title="Dark mode">
+              <i className="bi bi-moon-stars-fill" aria-hidden="true"></i>
+              <span className="d-none d-sm-inline">Dark</span>
+            </button>
           </div>
         </div>
       </nav>
