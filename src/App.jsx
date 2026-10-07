@@ -427,7 +427,7 @@ function App() {
         />
       </main>
 
-      <footer className="border-top bg-body py-4 mt-4">
+      <footer className="pixel-footer border-top bg-body py-4 mt-4">
         <div className="container d-flex flex-column flex-md-row justify-content-between gap-2 small text-secondary">
           <span>PixelForge — private, browser-based image optimization.</span>
           <span>Images are processed locally and are not uploaded.</span>
