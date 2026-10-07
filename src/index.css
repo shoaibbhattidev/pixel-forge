@@ -1,1 +1,74 @@
 @import "tailwindcss";
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f8f9fa;
+  color: #212529;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(13, 110, 253, 0.35);
+  outline-offset: 2px;
+}
+
+.drop-zone {
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.drop-zone:hover {
+  border-color: rgba(13, 110, 253, 0.55) !important;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.06);
+}
+
+.image-card {
+  height: 100%;
+}
+
+.preview-frame {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    linear-gradient(45deg, #f1f3f5 25%, transparent 25%),
+    linear-gradient(-45deg, #f1f3f5 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f1f3f5 75%),
+    linear-gradient(-45deg, transparent 75%, #f1f3f5 75%);
+  background-size: 24px 24px;
+  background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+}
+
+.preview-frame img {
+  max-height: 320px;
+  object-fit: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
