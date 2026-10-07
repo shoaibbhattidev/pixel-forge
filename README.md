@@ -238,6 +238,7 @@ pixel-forge/
 │   └── workflows/
 │       └── ci.yml
 ├── index.html
+├── LICENSE
 ├── package.json
 └── README.md
 ```
@@ -307,7 +308,13 @@ When reporting a bug, include:
 
 ## 📄 License
 
-No license has currently been declared for this repository. Check the repository owner's licensing terms before distributing or reusing the project.
+Pixel Forge is open-source software licensed under the **MIT License**.
+
+You are free to use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software, subject to the conditions of the MIT License.
+
+The full license text is available in the [LICENSE](LICENSE) file.
+
+**Copyright © 2026 Shoaib Bhatti.**
 
 ---
 
